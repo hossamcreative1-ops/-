@@ -333,17 +333,7 @@
   .info-text { font-size: 0.72rem; color: rgba(250,246,238,0.55); line-height: 1.4; }
 
   /* ── ADMIN ── */
-  #admin-trigger {
-    position: fixed; bottom: 20px; right: 20px;
-    width: 36px; height: 36px;
-    background: rgba(30,53,48,0.4);
-    border: 1px solid rgba(201,168,76,0.1);
-    border-radius: 50%; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    opacity: 0.2; transition: opacity 0.3s;
-    z-index: 100;
-  }
-  #admin-trigger:hover { opacity: 0.8; }
+  #admin-trigger { display: none; }
 
   #admin-panel {
     position: fixed; inset: 0; z-index: 500;
@@ -629,9 +619,17 @@ window.addEventListener('DOMContentLoaded', () => {
   const q = quotes[Math.floor(Math.random() * quotes.length)];
   document.getElementById('dynamic-quote').textContent = q;
 
-  // Keyboard shortcut: Ctrl+Shift+A
+  // Secret password: type "hossam" anywhere (not in an input field)
+  const SECRET = 'hossam';
+  let typedBuffer = '';
+  let bufferTimer = null;
   document.addEventListener('keydown', e => {
-    if (e.ctrlKey && e.shiftKey && e.key === 'A') openAdmin();
+    if (['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+    typedBuffer += e.key.toLowerCase();
+    if (typedBuffer.length > SECRET.length) typedBuffer = typedBuffer.slice(-SECRET.length);
+    clearTimeout(bufferTimer);
+    bufferTimer = setTimeout(() => { typedBuffer = ''; }, 1500);
+    if (typedBuffer === SECRET) { typedBuffer = ''; openAdmin(); }
   });
 });
 
