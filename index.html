@@ -565,13 +565,15 @@
 // ── DATA ──
 const STORAGE_KEY_CURRENT = 'donation_current';
 const STORAGE_KEY_TARGET  = 'donation_target';
-const DEFAULT_TARGET = 50000;
-const DEFAULT_CURRENT = 0;
+const CODE_TARGET  = 60000;
+const CODE_CURRENT = 2100;
 
 function getData() {
+  const storedCurrent = localStorage.getItem(STORAGE_KEY_CURRENT);
+  const storedTarget  = localStorage.getItem(STORAGE_KEY_TARGET);
   return {
-    current: parseFloat(localStorage.getItem(STORAGE_KEY_CURRENT) ?? DEFAULT_CURRENT),
-    target:  parseFloat(localStorage.getItem(STORAGE_KEY_TARGET)  ?? DEFAULT_TARGET),
+    current: storedCurrent !== null ? Math.max(parseFloat(storedCurrent), CODE_CURRENT) : CODE_CURRENT,
+    target:  storedTarget  !== null ? parseFloat(storedTarget) : CODE_TARGET,
   };
 }
 function setData(current, target) {
