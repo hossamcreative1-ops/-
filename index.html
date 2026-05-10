@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>حملة تبرع كلية آداب إنجليزي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;700;900&family=Playfair+Display:ital@1&display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --gold: #C9A84C;
+    --gold-light: #E8C97A;
+    --gold-dim: #8a6d2f;
+    --teal: #1B6B5A;
+    --teal-light: #2A9878;
+    --teal-dark: #0d3d30;
+    --cream: #FAF6EE;
+    --cream-dark: #F0E9D8;
+    --ink: #1a1208;
+    --bg: #0f1f1a;
+    --surface: #162820;
+    --surface2: #1e3530;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Cairo', sans-serif;
+    background: var(--bg);
+    color: var(--cream);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── SPLASH ── */
+  #splash {
+    position: fixed; inset: 0; z-index: 9999;
+    background: var(--teal-dark);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  #splash.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+
+  .splash-ornament {
+    width: 120px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 16px auto;
+  }
+  .splash-title {
+    font-family: 'Amiri', serif;
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 700;
+    color: var(--gold-light);
+    text-align: center;
+    line-height: 1.4;
+    letter-spacing: 0.02em;
+    animation: fadeUp 1s ease both;
+  }
+  .splash-sub {
+    font-family: 'Cairo', sans-serif;
+    font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+    font-weight: 300;
+    color: rgba(250,246,238,0.6);
+    text-align: center;
+    margin-top: 10px;
+    animation: fadeUp 1s ease 0.3s both;
+  }
+  .splash-loader {
+    margin-top: 40px;
+    width: 60px; height: 2px;
+    background: var(--surface2);
+    border-radius: 2px;
+    overflow: hidden;
+    animation: fadeUp 1s ease 0.5s both;
+  }
+  .splash-loader::after {
+    content: '';
+    display: block;
+    width: 0%; height: 100%;
+    background: var(--gold);
+    animation: loaderBar 2.4s ease forwards;
+  }
+  @keyframes loaderBar { to { width: 100%; } }
+
+  /* ── DECORATIVE BG ── */
+  .geo-bg {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 10% 20%, rgba(27,107,90,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 60% at 90% 80%, rgba(201,168,76,0.08) 0%, transparent 70%);
+  }
+  .geo-bg::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='rgba(201,168,76,0.04)' stroke-width='0.5'%3E%3Cpolygon points='30,2 58,17 58,43 30,58 2,43 2,17'/%3E%3Cpolygon points='30,10 50,21 50,39 30,50 10,39 10,21'/%3E%3C/g%3E%3C/svg%3E");
+    background-size: 60px 60px;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    position: relative; z-index: 10;
+    padding: 32px 24px 0;
+    text-align: center;
+  }
+  .header-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(27,107,90,0.3);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 100px;
+    padding: 6px 18px;
+    font-size: 0.78rem;
+    color: var(--gold-light);
+    letter-spacing: 0.08em;
+    margin-bottom: 20px;
+  }
+  .header-badge span { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.5;transform:scale(1.3)} }
+
+  .main-title {
+    font-family: 'Amiri', serif;
+    font-size: clamp(1.8rem, 5vw, 3.2rem);
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.4;
+  }
+  .main-title span { color: var(--gold-light); }
+
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    max-width: 280px; margin: 18px auto;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(201,168,76,0.4));
+  }
+  .divider::after { background: linear-gradient(90deg, rgba(201,168,76,0.4), transparent); }
+  .divider-gem { color: var(--gold); font-size: 0.7rem; }
+
+  /* ── QUOTE ── */
+  .quote-card {
+    max-width: 680px; margin: 28px auto;
+    padding: 24px 28px;
+    background: rgba(30,53,48,0.6);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 16px;
+    backdrop-filter: blur(8px);
+    position: relative; overflow: hidden;
+  }
+  .quote-card::before {
+    content: '❝';
+    position: absolute; top: -10px; right: 20px;
+    font-size: 5rem;
+    color: rgba(201,168,76,0.08);
+    font-family: serif; line-height: 1;
+  }
+  .quote-text {
+    font-family: 'Amiri', serif;
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    color: var(--gold-light);
+    text-align: center;
+    line-height: 1.9;
+    animation: fadeInQuote 1s ease both;
+  }
+  @keyframes fadeInQuote { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+
+  /* ── MAIN CARD ── */
+  .main-container { position: relative; z-index: 10; padding: 0 16px 80px; }
+  .campaign-card {
+    max-width: 680px; margin: 24px auto;
+    background: var(--surface);
+    border: 1px solid rgba(201,168,76,0.15);
+    border-radius: 24px;
+    overflow: hidden;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+  }
+
+  .card-header {
+    background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+    padding: 28px 28px 20px;
+    position: relative; overflow: hidden;
+  }
+  .card-header::after {
+    content: '';
+    position: absolute; bottom: -1px; left: 0; right: 0; height: 20px;
+    background: var(--surface);
+    clip-path: ellipse(55% 100% at 50% 100%);
+  }
+  .card-header-label {
+    font-size: 0.75rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: rgba(250,246,238,0.5); margin-bottom: 6px;
+  }
+  .card-header-title {
+    font-family: 'Amiri', serif;
+    font-size: 1.4rem; font-weight: 700;
+    color: var(--gold-light);
+  }
+
+  .amounts-row {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px; padding: 28px 28px 0;
+  }
+  .amount-box {
+    background: var(--surface2);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 14px; padding: 18px 16px;
+    text-align: center;
+    transition: border-color 0.3s;
+  }
+  .amount-box:hover { border-color: rgba(201,168,76,0.3); }
+  .amount-label {
+    font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.08em;
+    color: rgba(250,246,238,0.45);
+    margin-bottom: 8px; text-transform: uppercase;
+  }
+  .amount-value {
+    font-family: 'Cairo', sans-serif;
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    font-weight: 900; color: var(--cream);
+    line-height: 1;
+  }
+  .amount-value.current { color: var(--gold-light); }
+  .amount-currency {
+    font-size: 0.7rem; font-weight: 400;
+    color: rgba(250,246,238,0.4); margin-top: 4px;
+  }
+
+  /* ── PROGRESS BAR ── */
+  .progress-section { padding: 24px 28px; }
+  .progress-header {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 10px;
+  }
+  .progress-label {
+    font-size: 0.78rem; font-weight: 600;
+    color: rgba(250,246,238,0.5); letter-spacing: 0.06em;
+  }
+  .progress-percent {
+    font-family: 'Cairo', sans-serif;
+    font-size: 1.1rem; font-weight: 900;
+    color: var(--gold-light);
+  }
+  .progress-track {
+    height: 10px; background: var(--surface2);
+    border-radius: 10px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal-light), var(--gold));
+    border-radius: 10px;
+    width: 0%;
+    transition: width 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+  }
+  .progress-fill::after {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    animation: shimmer 2s infinite;
+  }
+  @keyframes shimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(300%)} }
+
+  /* ── DONATE NUMBER ── */
+  .donate-section { padding: 0 28px 28px; }
+  .donate-label {
+    font-size: 0.75rem; font-weight: 600;
+    color: rgba(250,246,238,0.45); letter-spacing: 0.1em;
+    text-align: center; text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .donate-number-wrapper {
+    display: flex; align-items: center;
+    background: var(--surface2);
+    border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 14px; overflow: hidden;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  .donate-number-wrapper:hover {
+    border-color: rgba(201,168,76,0.5);
+    box-shadow: 0 0 20px rgba(201,168,76,0.08);
+  }
+  .donate-number {
+    flex: 1; padding: 16px 20px;
+    font-family: 'Cairo', sans-serif;
+    font-size: clamp(1rem, 3.5vw, 1.3rem);
+    font-weight: 700; color: var(--gold-light);
+    letter-spacing: 0.06em; direction: ltr; text-align: center;
+  }
+  .copy-btn {
+    padding: 16px 20px;
+    background: rgba(201,168,76,0.12);
+    border: none; cursor: pointer;
+    color: var(--gold); font-family: 'Cairo', sans-serif;
+    font-size: 0.8rem; font-weight: 700;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+  .copy-btn:hover { background: rgba(201,168,76,0.22); }
+  .copy-btn.copied { background: rgba(42,152,120,0.25); color: var(--teal-light); }
+
+  /* ── TOAST ── */
+  #toast {
+    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--teal);
+    border: 1px solid rgba(201,168,76,0.3);
+    color: var(--cream); padding: 12px 24px;
+    border-radius: 100px;
+    font-size: 0.85rem; font-weight: 600;
+    z-index: 1000; opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none; white-space: nowrap;
+  }
+  #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── INFO STRIP ── */
+  .info-strip {
+    max-width: 680px; margin: 0 auto 24px;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .info-item {
+    background: rgba(30,53,48,0.5);
+    border: 1px solid rgba(201,168,76,0.1);
+    border-radius: 12px; padding: 14px 10px;
+    text-align: center;
+  }
+  .info-icon { font-size: 1.3rem; margin-bottom: 6px; }
+  .info-text { font-size: 0.72rem; color: rgba(250,246,238,0.55); line-height: 1.4; }
+
+  /* ── ADMIN ── */
+  #admin-trigger {
+    position: fixed; bottom: 20px; right: 20px;
+    width: 36px; height: 36px;
+    background: rgba(30,53,48,0.4);
+    border: 1px solid rgba(201,168,76,0.1);
+    border-radius: 50%; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0.2; transition: opacity 0.3s;
+    z-index: 100;
+  }
+  #admin-trigger:hover { opacity: 0.8; }
+
+  #admin-panel {
+    position: fixed; inset: 0; z-index: 500;
+    display: none; align-items: center; justify-content: center;
+    background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
+  }
+  #admin-panel.open { display: flex; }
+  .admin-card {
+    background: var(--surface);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 20px; padding: 32px 28px;
+    width: min(440px, 90vw);
+    box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+  }
+  .admin-title {
+    font-family: 'Amiri', serif;
+    font-size: 1.4rem; font-weight: 700;
+    color: var(--gold-light); margin-bottom: 24px;
+    text-align: center;
+  }
+  .admin-group { margin-bottom: 18px; }
+  .admin-label {
+    display: block; font-size: 0.78rem; font-weight: 600;
+    color: rgba(250,246,238,0.5); margin-bottom: 8px;
+    letter-spacing: 0.06em;
+  }
+  .admin-input {
+    width: 100%; padding: 12px 16px;
+    background: var(--surface2);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px; color: var(--cream);
+    font-family: 'Cairo', sans-serif; font-size: 1rem;
+    outline: none; transition: border-color 0.2s;
+  }
+  .admin-input:focus { border-color: var(--gold); }
+  .admin-btn {
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
+    border: 1px solid rgba(201,168,76,0.3);
+    border-radius: 10px; color: var(--cream);
+    font-family: 'Cairo', sans-serif; font-size: 1rem; font-weight: 700;
+    cursor: pointer; margin-top: 6px;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+  .admin-btn:hover { opacity: 0.9; }
+  .admin-btn:active { transform: scale(0.98); }
+  .admin-close {
+    position: absolute; top: 16px; left: 16px;
+    background: none; border: none;
+    color: rgba(250,246,238,0.4); cursor: pointer;
+    font-size: 1.2rem; padding: 4px;
+  }
+  .admin-card { position: relative; }
+  .admin-divider {
+    height: 1px; background: rgba(255,255,255,0.08);
+    margin: 20px 0;
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 10;
+    text-align: center; padding: 20px;
+    font-size: 0.72rem;
+    color: rgba(250,246,238,0.25);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(20px); }
+    to   { opacity:1; transform:none; }
+  }
+  .reveal { animation: fadeUp 0.8s ease both; }
+  .reveal-1 { animation-delay: 0.1s; }
+  .reveal-2 { animation-delay: 0.2s; }
+  .reveal-3 { animation-delay: 0.3s; }
+  .reveal-4 { animation-delay: 0.4s; }
+
+  @media (max-width: 480px) {
+    .amounts-row { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .info-strip { grid-template-columns: 1fr 1fr 1fr; }
+    .admin-card { padding: 24px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── SPLASH ── -->
+<div id="splash">
+  <div style="text-align:center; padding: 0 24px;">
+    <div style="font-size:2rem; margin-bottom:8px;">☪</div>
+    <div class="splash-ornament"></div>
+    <div class="splash-title">حملة تبرع<br/>كلية آداب إنجليزي</div>
+    <div class="splash-ornament"></div>
+    <div class="splash-sub">تصميم: حسام عبد الجواد</div>
+    <div class="splash-loader"></div>
+  </div>
+</div>
+
+<!-- ── DECORATIVE BG ── -->
+<div class="geo-bg"></div>
+
+<!-- ── MAIN CONTENT ── -->
+<div id="main-content" style="opacity:0; transition: opacity 0.6s ease;">
+
+  <header class="site-header">
+    <div class="reveal reveal-1">
+      <div class="header-badge">
+        <span></span>
+        حملة خيرية نشطة
+      </div>
+    </div>
+    <div class="main-title reveal reveal-2">
+      حملة تبرع<br/>
+      <span>كلية آداب إنجليزي</span>
+    </div>
+    <div class="divider reveal reveal-3"><div class="divider-gem">✦</div></div>
+  </header>
+
+  <main class="main-container">
+
+    <!-- Quote -->
+    <div class="quote-card reveal reveal-3" id="quote-card" style="max-width:680px; margin:0 auto 24px;">
+      <div class="quote-text" id="dynamic-quote"></div>
+    </div>
+
+    <!-- Info strip -->
+    <div class="info-strip reveal reveal-4">
+      <div class="info-item">
+        <div class="info-icon">🤲</div>
+        <div class="info-text">تبرعاتكم أمانة في أعناقنا</div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">💊</div>
+        <div class="info-text">مساعدات طبية وإنسانية</div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon">📲</div>
+        <div class="info-text">تحويل فوري وآمن</div>
+      </div>
+    </div>
+
+    <!-- Campaign Card -->
+    <div class="campaign-card reveal reveal-4">
+
+      <div class="card-header">
+        <div class="card-header-label">هدف الحملة</div>
+        <div class="card-header-title">مساعدة المحتاجين من أبناء الكلية</div>
+      </div>
+
+      <div class="amounts-row">
+        <div class="amount-box">
+          <div class="amount-label">المبلغ الحالي</div>
+          <div class="amount-value current" id="current-amount">٠</div>
+          <div class="amount-currency">جنيه مصري</div>
+        </div>
+        <div class="amount-box">
+          <div class="amount-label">المبلغ المستهدف</div>
+          <div class="amount-value" id="target-amount">٠</div>
+          <div class="amount-currency">جنيه مصري</div>
+        </div>
+      </div>
+
+      <div class="progress-section">
+        <div class="progress-header">
+          <div class="progress-label">نسبة الإنجاز</div>
+          <div class="progress-percent" id="progress-pct">٠٪</div>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progress-bar"></div>
+        </div>
+      </div>
+
+      <div class="donate-section">
+        <div class="donate-label">رقم الإيداع والاستفسار</div>
+        <div class="donate-number-wrapper">
+          <div class="donate-number" id="donate-num">+20 10 18244595</div>
+          <button class="copy-btn" id="copy-btn" onclick="copyNumber()">نسخ</button>
+        </div>
+      </div>
+
+    </div><!-- /campaign-card -->
+
+  </main>
+
+  <footer>
+    تصميم: حسام عبد الجواد · جميع الحقوق محفوظة
+  </footer>
+</div><!-- /main-content -->
+
+<!-- ── TOAST ── -->
+<div id="toast">✓ تم نسخ الرقم</div>
+
+<!-- ── ADMIN TRIGGER ── -->
+<button id="admin-trigger" onclick="openAdmin()" title="إعدادات">⚙</button>
+
+<!-- ── ADMIN PANEL ── -->
+<div id="admin-panel">
+  <div class="admin-card">
+    <button class="admin-close" onclick="closeAdmin()">✕</button>
+    <div class="admin-title">لوحة التحكم</div>
+
+    <div class="admin-group">
+      <label class="admin-label">المبلغ المستهدف (جنيه)</label>
+      <input class="admin-input" id="admin-target" type="number" placeholder="مثال: 50000" min="0"/>
+    </div>
+
+    <button class="admin-btn" onclick="setTarget()">تحديث الهدف</button>
+
+    <div class="admin-divider"></div>
+
+    <div class="admin-group">
+      <label class="admin-label">إضافة إلى المبلغ الحالي (جنيه)</label>
+      <input class="admin-input" id="admin-add" type="number" placeholder="أدخل المبلغ المُضاف" min="0"/>
+    </div>
+    <button class="admin-btn" onclick="addAmount()">إضافة المبلغ</button>
+
+    <div class="admin-divider"></div>
+
+    <div class="admin-group">
+      <label class="admin-label">تعيين المبلغ الحالي مباشرةً (جنيه)</label>
+      <input class="admin-input" id="admin-set-current" type="number" placeholder="المبلغ الكلي الحالي" min="0"/>
+    </div>
+    <button class="admin-btn" onclick="setCurrent()">تعيين المبلغ</button>
+
+  </div>
+</div>
+
+<script>
+// ── DATA ──
+const STORAGE_KEY_CURRENT = 'donation_current';
+const STORAGE_KEY_TARGET  = 'donation_target';
+const DEFAULT_TARGET = 50000;
+const DEFAULT_CURRENT = 0;
+
+function getData() {
+  return {
+    current: parseFloat(localStorage.getItem(STORAGE_KEY_CURRENT) ?? DEFAULT_CURRENT),
+    target:  parseFloat(localStorage.getItem(STORAGE_KEY_TARGET)  ?? DEFAULT_TARGET),
+  };
+}
+function setData(current, target) {
+  localStorage.setItem(STORAGE_KEY_CURRENT, current);
+  localStorage.setItem(STORAGE_KEY_TARGET,  target);
+}
+
+// Arabic numerals
+function toArabicNum(n) {
+  return Math.round(n).toLocaleString('ar-EG');
+}
+
+// ── RENDER ──
+function render() {
+  const { current, target } = getData();
+  const pct = target > 0 ? Math.min(100, (current / target) * 100) : 0;
+
+  document.getElementById('current-amount').textContent = toArabicNum(current);
+  document.getElementById('target-amount').textContent  = toArabicNum(target);
+  document.getElementById('progress-pct').textContent   = Math.round(pct).toLocaleString('ar-EG') + '٪';
+
+  // Animate bar after a short delay
+  setTimeout(() => {
+    document.getElementById('progress-bar').style.width = pct + '%';
+  }, 300);
+}
+
+// ── SPLASH ──
+window.addEventListener('DOMContentLoaded', () => {
+  const splash = document.getElementById('splash');
+  const main   = document.getElementById('main-content');
+
+  setTimeout(() => {
+    splash.classList.add('hide');
+    main.style.opacity = '1';
+    render();
+  }, 2800);
+
+  // Quotes
+  const quotes = [
+    "ما نَقَصَت صَدَقةٌ مِن مالٍ",
+    "وَمَنْ أَحْيَاهَا فَكَأَنَّمَا أَحْيَا النَّاسَ جَمِيعًا",
+    "وَإِذَا مَرِضْتُ فَهُوَ يَشْفِينِ"
+  ];
+  const q = quotes[Math.floor(Math.random() * quotes.length)];
+  document.getElementById('dynamic-quote').textContent = q;
+
+  // Keyboard shortcut: Ctrl+Shift+A
+  document.addEventListener('keydown', e => {
+    if (e.ctrlKey && e.shiftKey && e.key === 'A') openAdmin();
+  });
+});
+
+// ── COPY ──
+function copyNumber() {
+  const num = document.getElementById('donate-num').textContent.trim();
+  navigator.clipboard.writeText(num).then(() => {
+    showToast();
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = '✓ تم';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'نسخ'; btn.classList.remove('copied'); }, 2000);
+  });
+}
+function showToast() {
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── ADMIN ──
+function openAdmin() {
+  const { current, target } = getData();
+  document.getElementById('admin-target').value = target;
+  document.getElementById('admin-add').value = '';
+  document.getElementById('admin-set-current').value = current;
+  document.getElementById('admin-panel').classList.add('open');
+}
+function closeAdmin() {
+  document.getElementById('admin-panel').classList.remove('open');
+}
+document.getElementById('admin-panel').addEventListener('click', e => {
+  if (e.target === document.getElementById('admin-panel')) closeAdmin();
+});
+
+function setTarget() {
+  const val = parseFloat(document.getElementById('admin-target').value);
+  if (isNaN(val) || val < 0) return alert('أدخل قيمة صحيحة');
+  const { current } = getData();
+  setData(current, val);
+  render();
+  showToast2('تم تحديث الهدف');
+}
+function addAmount() {
+  const val = parseFloat(document.getElementById('admin-add').value);
+  if (isNaN(val) || val < 0) return alert('أدخل قيمة صحيحة');
+  const { current, target } = getData();
+  setData(current + val, target);
+  render();
+  showToast2('تم إضافة المبلغ');
+}
+function setCurrent() {
+  const val = parseFloat(document.getElementById('admin-set-current').value);
+  if (isNaN(val) || val < 0) return alert('أدخل قيمة صحيحة');
+  const { target } = getData();
+  setData(val, target);
+  render();
+  showToast2('تم تحديث المبلغ الحالي');
+}
+function showToast2(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = '✓ ' + msg;
+  t.classList.add('show');
+  setTimeout(() => { t.classList.remove('show'); t.textContent = '✓ تم نسخ الرقم'; }, 2500);
+  closeAdmin();
+}
+</script>
+</body>
+</html>
