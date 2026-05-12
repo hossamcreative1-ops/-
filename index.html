@@ -332,66 +332,6 @@
   .info-icon { font-size: 1.3rem; margin-bottom: 6px; }
   .info-text { font-size: 0.72rem; color: rgba(250,246,238,0.55); line-height: 1.4; }
 
-  /* ── ADMIN ── */
-  #admin-trigger { display: none; }
-
-  #admin-panel {
-    position: fixed; inset: 0; z-index: 500;
-    display: none; align-items: center; justify-content: center;
-    background: rgba(0,0,0,0.7); backdrop-filter: blur(6px);
-  }
-  #admin-panel.open { display: flex; }
-  .admin-card {
-    background: var(--surface);
-    border: 1px solid rgba(201,168,76,0.3);
-    border-radius: 20px; padding: 32px 28px;
-    width: min(440px, 90vw);
-    box-shadow: 0 32px 80px rgba(0,0,0,0.5);
-  }
-  .admin-title {
-    font-family: 'Amiri', serif;
-    font-size: 1.4rem; font-weight: 700;
-    color: var(--gold-light); margin-bottom: 24px;
-    text-align: center;
-  }
-  .admin-group { margin-bottom: 18px; }
-  .admin-label {
-    display: block; font-size: 0.78rem; font-weight: 600;
-    color: rgba(250,246,238,0.5); margin-bottom: 8px;
-    letter-spacing: 0.06em;
-  }
-  .admin-input {
-    width: 100%; padding: 12px 16px;
-    background: var(--surface2);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 10px; color: var(--cream);
-    font-family: 'Cairo', sans-serif; font-size: 1rem;
-    outline: none; transition: border-color 0.2s;
-  }
-  .admin-input:focus { border-color: var(--gold); }
-  .admin-btn {
-    width: 100%; padding: 14px;
-    background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 100%);
-    border: 1px solid rgba(201,168,76,0.3);
-    border-radius: 10px; color: var(--cream);
-    font-family: 'Cairo', sans-serif; font-size: 1rem; font-weight: 700;
-    cursor: pointer; margin-top: 6px;
-    transition: opacity 0.2s, transform 0.1s;
-  }
-  .admin-btn:hover { opacity: 0.9; }
-  .admin-btn:active { transform: scale(0.98); }
-  .admin-close {
-    position: absolute; top: 16px; left: 16px;
-    background: none; border: none;
-    color: rgba(250,246,238,0.4); cursor: pointer;
-    font-size: 1.2rem; padding: 4px;
-  }
-  .admin-card { position: relative; }
-  .admin-divider {
-    height: 1px; background: rgba(255,255,255,0.08);
-    margin: 20px 0;
-  }
-
   /* ── FOOTER ── */
   footer {
     position: relative; z-index: 10;
@@ -414,7 +354,6 @@
   @media (max-width: 480px) {
     .amounts-row { grid-template-columns: 1fr 1fr; gap: 10px; }
     .info-strip { grid-template-columns: 1fr 1fr 1fr; }
-    .admin-card { padding: 24px 18px; }
   }
 </style>
 </head>
@@ -486,12 +425,12 @@
       <div class="amounts-row">
         <div class="amount-box">
           <div class="amount-label">المبلغ الحالي</div>
-          <div class="amount-value current" id="current-amount">٠</div>
+          <div class="amount-value current" id="current-amount">جارٍ التحميل…</div>
           <div class="amount-currency">جنيه مصري</div>
         </div>
         <div class="amount-box">
           <div class="amount-label">المبلغ المستهدف</div>
-          <div class="amount-value" id="target-amount">٠</div>
+          <div class="amount-value" id="target-amount">جارٍ التحميل…</div>
           <div class="amount-currency">جنيه مصري</div>
         </div>
       </div>
@@ -526,79 +465,40 @@
 <!-- ── TOAST ── -->
 <div id="toast">✓ تم نسخ الرقم</div>
 
-<!-- ── ADMIN TRIGGER ── -->
-<button id="admin-trigger" onclick="openAdmin()" title="إعدادات">⚙</button>
-
-<!-- ── ADMIN PANEL ── -->
-<div id="admin-panel">
-  <div class="admin-card">
-    <button class="admin-close" onclick="closeAdmin()">✕</button>
-    <div class="admin-title">لوحة التحكم</div>
-
-    <div class="admin-group">
-      <label class="admin-label">المبلغ المستهدف (جنيه)</label>
-      <input class="admin-input" id="admin-target" type="number" placeholder="مثال: 50000" min="0"/>
-    </div>
-
-    <button class="admin-btn" onclick="setTarget()">تحديث الهدف</button>
-
-    <div class="admin-divider"></div>
-
-    <div class="admin-group">
-      <label class="admin-label">إضافة إلى المبلغ الحالي (جنيه)</label>
-      <input class="admin-input" id="admin-add" type="number" placeholder="أدخل المبلغ المُضاف" min="0"/>
-    </div>
-    <button class="admin-btn" onclick="addAmount()">إضافة المبلغ</button>
-
-    <div class="admin-divider"></div>
-
-    <div class="admin-group">
-      <label class="admin-label">تعيين المبلغ الحالي مباشرةً (جنيه)</label>
-      <input class="admin-input" id="admin-set-current" type="number" placeholder="المبلغ الكلي الحالي" min="0"/>
-    </div>
-    <button class="admin-btn" onclick="setCurrent()">تعيين المبلغ</button>
-
-  </div>
-</div>
-
 <script>
-// ── DATA ──
-const STORAGE_KEY_CURRENT = 'donation_current';
-const STORAGE_KEY_TARGET  = 'donation_target';
-const CODE_TARGET  = 60000;
-const CODE_CURRENT = 2100;
-
-function getData() {
-  const storedCurrent = localStorage.getItem(STORAGE_KEY_CURRENT);
-  const storedTarget  = localStorage.getItem(STORAGE_KEY_TARGET);
-  return {
-    current: storedCurrent !== null ? Math.max(parseFloat(storedCurrent), CODE_CURRENT) : CODE_CURRENT,
-    target:  storedTarget  !== null ? parseFloat(storedTarget) : CODE_TARGET,
-  };
-}
-function setData(current, target) {
-  localStorage.setItem(STORAGE_KEY_CURRENT, current);
-  localStorage.setItem(STORAGE_KEY_TARGET,  target);
-}
-
-// Arabic numerals
+// ── Arabic numerals helper ──
 function toArabicNum(n) {
   return Math.round(n).toLocaleString('ar-EG');
 }
 
 // ── RENDER ──
-function render() {
-  const { current, target } = getData();
+function render(current, target) {
   const pct = target > 0 ? Math.min(100, (current / target) * 100) : 0;
 
   document.getElementById('current-amount').textContent = toArabicNum(current);
   document.getElementById('target-amount').textContent  = toArabicNum(target);
   document.getElementById('progress-pct').textContent   = Math.round(pct).toLocaleString('ar-EG') + '٪';
 
-  // Animate bar after a short delay
   setTimeout(() => {
     document.getElementById('progress-bar').style.width = pct + '%';
   }, 300);
+}
+
+// ── FETCH data.json on every page load ──
+async function loadData() {
+  try {
+    // Cache-bust so the browser always fetches fresh data
+    const res = await fetch('data.json?t=' + Date.now());
+    if (!res.ok) throw new Error('fetch failed');
+    const data = await res.json();
+    render(data.current ?? 0, data.target ?? 0);
+  } catch (e) {
+    // Fallback: show zeros gracefully
+    document.getElementById('current-amount').textContent = '٠';
+    document.getElementById('target-amount').textContent  = '٠';
+    document.getElementById('progress-pct').textContent   = '٠٪';
+    console.warn('تعذّر تحميل data.json — تأكّد من رفع الملف مع الموقع.', e);
+  }
 }
 
 // ── SPLASH ──
@@ -606,97 +506,38 @@ window.addEventListener('DOMContentLoaded', () => {
   const splash = document.getElementById('splash');
   const main   = document.getElementById('main-content');
 
-  setTimeout(() => {
-    splash.classList.add('hide');
-    main.style.opacity = '1';
-    render();
-  }, 2800);
-
   // Quotes
   const quotes = [
     "ما نَقَصَت صَدَقةٌ مِن مالٍ",
     "وَمَنْ أَحْيَاهَا فَكَأَنَّمَا أَحْيَا النَّاسَ جَمِيعًا",
     "وَإِذَا مَرِضْتُ فَهُوَ يَشْفِينِ"
   ];
-  const q = quotes[Math.floor(Math.random() * quotes.length)];
-  document.getElementById('dynamic-quote').textContent = q;
+  document.getElementById('dynamic-quote').textContent =
+    quotes[Math.floor(Math.random() * quotes.length)];
 
-  // Secret password: type "hossam" anywhere (not in an input field)
-  const SECRET = 'hossam';
-  let typedBuffer = '';
-  let bufferTimer = null;
-  document.addEventListener('keydown', e => {
-    if (['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
-    typedBuffer += e.key.toLowerCase();
-    if (typedBuffer.length > SECRET.length) typedBuffer = typedBuffer.slice(-SECRET.length);
-    clearTimeout(bufferTimer);
-    bufferTimer = setTimeout(() => { typedBuffer = ''; }, 1500);
-    if (typedBuffer === SECRET) { typedBuffer = ''; openAdmin(); }
-  });
+  setTimeout(async () => {
+    await loadData();          // fetch fresh data before revealing
+    splash.classList.add('hide');
+    main.style.opacity = '1';
+  }, 2800);
 });
 
 // ── COPY ──
 function copyNumber() {
   const num = document.getElementById('donate-num').textContent.trim();
   navigator.clipboard.writeText(num).then(() => {
-    showToast();
+    showToast('✓ تم نسخ الرقم');
     const btn = document.getElementById('copy-btn');
     btn.textContent = '✓ تم';
     btn.classList.add('copied');
     setTimeout(() => { btn.textContent = 'نسخ'; btn.classList.remove('copied'); }, 2000);
   });
 }
-function showToast() {
+function showToast(msg) {
   const t = document.getElementById('toast');
+  t.textContent = msg;
   t.classList.add('show');
   setTimeout(() => t.classList.remove('show'), 2500);
-}
-
-// ── ADMIN ──
-function openAdmin() {
-  const { current, target } = getData();
-  document.getElementById('admin-target').value = target;
-  document.getElementById('admin-add').value = '';
-  document.getElementById('admin-set-current').value = current;
-  document.getElementById('admin-panel').classList.add('open');
-}
-function closeAdmin() {
-  document.getElementById('admin-panel').classList.remove('open');
-}
-document.getElementById('admin-panel').addEventListener('click', e => {
-  if (e.target === document.getElementById('admin-panel')) closeAdmin();
-});
-
-function setTarget() {
-  const val = parseFloat(document.getElementById('admin-target').value);
-  if (isNaN(val) || val < 0) return alert('أدخل قيمة صحيحة');
-  const { current } = getData();
-  setData(current, val);
-  render();
-  showToast2('تم تحديث الهدف');
-}
-function addAmount() {
-  const val = parseFloat(document.getElementById('admin-add').value);
-  if (isNaN(val) || val < 0) return alert('أدخل قيمة صحيحة');
-  const { current, target } = getData();
-  setData(current + val, target);
-  render();
-  showToast2('تم إضافة المبلغ');
-}
-function setCurrent() {
-  const val = parseFloat(document.getElementById('admin-set-current').value);
-  if (isNaN(val) || val < 0) return alert('أدخل قيمة صحيحة');
-  const { target } = getData();
-  setData(val, target);
-  render();
-  showToast2('تم تحديث المبلغ الحالي');
-}
-function showToast2(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = '✓ ' + msg;
-  t.classList.add('show');
-  setTimeout(() => { t.classList.remove('show'); t.textContent = '✓ تم نسخ الرقم'; }, 2500);
-  closeAdmin();
 }
 </script>
 </body>
